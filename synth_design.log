@@ -1,0 +1,661 @@
+dc_shell> 
+dc_shell> 
+dc_shell> man define_name_rules
+2.  Synopsys Commands                                        Command Reference
+                               define_name_rules
+
+NAME
+       define_name_rules
+              Defines a set of name rules for designs.
+
+SYNTAX
+       status define_name_rules
+               name_rules
+               [-max_length length]
+               [-target_bus_naming_style bus_naming_style]
+               [-allowed allowed_chars]
+               [-restricted restricted_chars]
+               [-first_restricted first_chars]
+               [-last_restricted last_chars]
+               [-reserved_words reserves]
+               [-replacement_char char]
+               [-remove_chars]
+               [-equal_ports_nets]
+               [-inout_ports_equal_nets]
+               [-collapse_name_space]
+               [-case_insensitive]
+               [-special output_format]
+               [-prefix prefix_name]
+               [-map map_string]
+               [-type object_type] [-reset]
+               [-remove_internal_net_bus]
+               [-remove_port_bus]
+               [-check_bus_indexing]
+               [-check_bus_indexing_use_type_info]
+               [-rename_three_state_port_net]
+               [-check_internal_net_name]
+               [-remove_irregular_port_bus]
+               [-remove_irregular_net_bus]
+               [-flatten_multi_dimension_busses]
+               [-preserve_struct_ports]
+               [-dont_change_bus_members]
+               [-dont_change_ports]
+               [-add_dummy_nets]
+               [-dummy_net_prefix dummy_nets_format]
+               [-dir_inout_as_in]
+
+   Data Types
+       name_rules            string
+       length                integer
+       bus_naming_style      string
+       allowed_chars         string
+       restricted_chars      string
+       first_chars           string
+       last_chars            string
+       reserves              list
+       char                  string
+       output_format         string
+       prefix_name           string
+       map_string            string
+       object_type           string
+       dummy_nets_format     string
+
+ARGUMENTS
+       name_rules
+              Specifies  the  name of the rules being defined.  If named rules
+              called name_rules do not exist, they are created.
+
+       -max_length length
+              Specifies the maximum length of a name, which must be 8 or  more
+              characters,  except  that a value of 0 resets the maximum length
+              to its default (any length).
+
+       -target_bus_naming_style bus_naming_style
+              Specifies the target bus naming style for all object  types,  to
+              which  the  current bus naming style is to be changed.  For this
+              option to succeed, set the bus_naming_style  variable  with  the
+              current bus naming style.  For an example, see the section enti-
+              tled "Changing the Bus Naming Style."  By  default,  the  target
+              bus naming style is set to be the same as the current bus naming
+              style.  If the target bus naming style  is  different  from  the
+              current  bus naming style, after the rule is applied through the
+              change_names command, the bus naming style  becomes  the  target
+              bus  naming  style,  but  this does not occur automatically.  If
+              more change_names commands need to be issued later,  be  careful
+              that  the  bus  naming  style  is in transition from one rule to
+              another rule and needs to be set manually to  reflect  the  real
+              bus style inside the .db file during the transition.
+
+       -allowed allowed_chars
+              Specifies  the set of characters allowed in names, which must be
+              10 or more characters.  The format of the  allowed_chars  string
+              is  provided  in  the  "DESCRIPTION"  section.   By default, any
+              printable character is allowed in a name.
+
+       -restricted restricted_chars
+              Specifies the set of characters not allowed in names.  The  for-
+              mat  of  the  chars string is provided in the "DESCRIPTION" sec-
+              tion.  By default, any printable character is allowed in a name.
+
+       -first_restricted first_chars
+              Specifies  a set of characters that are not allowed as the first
+              character in a name.  The format of the chars string is provided
+              in the "DESCRIPTION" section.  By default, any printable charac-
+              ter is allowed as the first character of a name.
+
+       -last_restricted last_chars
+              Specifies a set of characters not allowed as the last  character
+              in  a  name.  The format of the chars string is described in the
+              "DESCRIPTION" section.  By default, any printable  character  is
+              allowed as the last character of a name.
+
+       -reserved_words reserves
+              Specifies  a  list  of words that cannot be used as a name.  The
+              reserves value contains words that are  considered  reserved  in
+              your target system.  By default, there are no reserved words.
+
+       -replacement_char char
+              Specifies  the  character used to replace characters not allowed
+              in names, as specified by the -allowed  or  -restricted  option.
+              By  default, the replacement character is the underscore charac-
+              ter (_).
+
+       -remove_chars
+              Specifies that characters not allowed in names, as specified  by
+              the  -allowed  or  -restricted  option,  are removed rather than
+              replaced.  By default, illegal characters are  replaced  by  the
+              character specified with -replacement_char.
+
+       -equal_ports_nets
+              Specifies  that  nets connected to non-inout ports must have the
+              same name as their connecting port.  If a net  is  connected  to
+              more  than one port, the net's name is not changed and a warning
+              is issued.  By default, nets are not required to match the names
+              of the non-inout ports to which they are connected.
+
+       -inout_ports_equal_nets
+              Specifies  that nets connected to inout ports must have the same
+              name as their connecting port.  If a net is  connected  to  more
+              than  one  port,  the net's name is not changed and a warning is
+              issued.  By default, nets are not required to match the names of
+              the inout ports to which they are connected.
+
+       -collapse_name_space
+              Specifies  that  the name space of ports, cells, and nets is the
+              same.  No port, cell, or net in a design can have the same name.
+              By  default,  ports,  cells,  and  nets each have their own name
+              space.
+
+       -case_insensitive
+              Specifies that the case of characters is  not  significant  when
+              comparing  names.   For example, the name example (lowercase) is
+              equivalent to EXAMPLE (uppercase).  If two names are  equivalent
+              within  a  name  space,  one  of  the names must be changed.  By
+              default, the case of a name is significant.
+
+       -special output_format
+              Specifies to use special rules pertaining to a  specific  target
+              system when changing names.  By default, no special rules apply.
+              The possible values for output_format are as follows:
+
+                verilog
+                vhdl
+                sge
+                vhdl93
+                sge_vhdl
+                siff
+
+       -prefix prefix_name
+              Specifies a prefix used when changing a name.  By  default,  the
+              prefixes are P for ports, U for cells, and N for nets.
+
+              Use this option only when the change_names command needs to cre-
+              ate a completely new name to ensure the name's uniqueness.   See
+              Step 3 of the "Naming Rules" section for more information.
+
+       -map map_string
+              Provides  a  way to change objects in addition to the previously
+              specified name rules.  This option specifies  the  name  mapping
+              and  replacement  rules as defined in the map_string.  See "Map-
+              ping Rules" under the "Naming Rules" section for details.
+
+       -type object_type
+              Specifies that the rules being defined apply only to  the  given
+              type of objects.  Allowed values for object_type are port, cell,
+              or net.  By default, the  defined  rules  apply  to  all  object
+              types.
+
+       -reset Resets  all  rules  to their default values.  When all rules are
+              set to the defaults, no restrictions are imposed on the names.
+
+       -remove_internal_net_bus
+              Bit-blasts all internal net buses.
+
+       -remove_port_bus
+              Bit-blasts all port buses.  Net buses that connect to ports  are
+              also    bit-blasted.     This   option   overrides   the   -pre-
+              serve_struct_ports option, setting  its  value  to  the  default
+              value.
+
+       -check_bus_indexing
+              Checks the indices of buses and bit-blasts the incomplete buses.
+
+       -check_bus_indexing_use_type_info
+              Checks bus indexing based on the bus type information  and  bit-
+              blast for incomplete port buses.
+
+       -rename_three_state_port_net
+              Renames  three-state port nets so they have different names from
+              the ports on the inout port connections.
+
+       -check_internal_net_name
+              Checks and renames nets that have the same name as  some  ports,
+              but the nets are not connected to these ports.
+
+       -remove_irregular_port_bus
+              Bit-blasts any port bus that contains irregular members.
+
+       -remove_irregular_net_bus
+              Bit-blasts any net bus that contains irregular members.
+
+       -flatten_multi_dimension_busses
+              Flattens multi-dimension ports, net buses, and arrays so writing
+              out is easier.
+
+       -preserve_struct_ports
+              Specifies to avoid bit-blasted ports inferred from SystemVerilog
+              structures or VHDL records.
+
+       -dont_change_bus_members
+              Specifies not to change the elements that are in a either a port
+              bus or a net bus.   This  option  overrides  the  previous  four
+              options  (-remove_irregular_port_bus, -remove_irregular_net_bus,
+              -flatten_multi_dimension_busses,  and   -preserve_struct_ports).
+              If  this  option  is  set,  these  four options are reset to the
+              default value of false.   In  most  cases,  this  option  should
+              remain false.
+
+       -dont_change_ports
+              Specifies  not  to  change  elements  that  are set by the -type
+              option to port.
+
+       -add_dummy_nets
+              Adds dummy nets for  unconnected  pins.   The  -dummy_net_prefix
+              option  specifies  the  format  to  name dummy nets.  The format
+              defaults to SYNOPSYS_UNCONNECTED_%d.
+
+       -dummy_net_prefix dummy_nets_format
+              Sets the prefix  for  the  dummy  net  naming  convention.   The
+              dummy_nets_format  value  specifies the format to name the dummy
+              nets.
+
+       -dir_inout_as_in
+              Instructs the tool to treat all instances with the INOUT  direc-
+              tion  as  if  they  were  set to IN.  The default behavior is to
+              treat them as direction OUT.
+
+DESCRIPTION
+       The define_name_rules command defines a set of rules for naming  design
+       objects.  Name rules are used by the change_names and report_names com-
+       mands.  The report_name_rules command displays a listing  of  the  name
+       rules currently defined in the shell.
+
+       Name  rules  can  be defined in multiple calls to the define_name_rules
+       command.  For an example of multiple calls, see the "EXAMPLES" section.
+
+       The  -type  option enables you to define rules that apply to a specific
+       object  type,  such  as  port,   cell,   or   net).    Each   call   to
+       define_name_rules  is  additive  or overrides previous calls for a spe-
+       cific name rules.
+
+   Naming Rules
+       This section describes the effects of specific  options  when  defining
+       name rules with define_name_rules.
+
+       Maximum Length Rules
+              The  maximum  number  of  characters in a name can be restricted
+              with the -max_length option.
+
+              Names  shorter  than  the  specified   maximum   length   remain
+              unchanged.   Names  longer than the specified maximum length are
+              modified so that their lengths are less than  or  equal  to  the
+              maximum.
+
+              Fixed  names are guaranteed to be unique within the design.  The
+              following steps are applied in succession to fix a name to  meet
+              the uniqueness criteria:
+
+               o Step 1
+                Truncation  -  Names are truncated to meet the maximum length.
+                The truncated name is accepted if  it  is  unique  within  the
+                design.       For      example,     if     the     name     is
+                THIS_NAME_IS_TOO_LONG_TO_BE_ACCEPTABLE and the maximum  number
+                of characters is 16, the resulting name is THIS_NAME_IS_TOO.
+
+               o Step 2
+                Truncation  with  index  - Names are truncated.  The truncated
+                name is appended with an  index  in  an  attempt  to  make  it
+                unique.   If  a  unique name is found, it is accepted.  If the
+                name from  the  previous  example,  THIS_NAME_IS_TOO,  is  not
+                unique,  this the tool tries THIS_NAME_IS_T1, THIS_NAME_IS_T2,
+                and continues up to, THIS_NAME_IS_T99.  The first unique  name
+                is accepted.
+
+               o Step 3
+                Basic  names  - If both previous steps fail, the original name
+                is deleted and names of the form <prefix><index> are generated
+                until  a  unique name is found.  The <prefix> is defined using
+                the -prefix option.  Examples are N1, N2, and so on.
+
+              If all three steps fail to generate a unique name, the  original
+              name is retained and a warning message is issued.
+
+       Character Restriction Rules
+              Specify  characters  that  make  up  names  with  the  -allowed,
+              -restricted, -first_restricted, and -last_restricted options.
+
+              To  specify  the  character  set  allowed,   use   -allowed   or
+              -restricted.   Either  of  these  options overrides the previous
+              values  of   -allowed,   -restricted,   -first_restricted,   and
+              -last_restricted.
+
+              In    conjunction    with    -allowed    or   -restricted,   use
+              -first_restricted and -last_restricted to further  restrict  the
+              available characters for the first and last character of a name.
+              The -first_restricted and  -last_restricted  options  depend  on
+              -allowed  and -restricted, and modify the set of available char-
+              acters for their special cases.  The set of characters available
+              for first and last characters cannot exceed that defined for all
+              other characters.
+
+              The allowed_chars, restricted_chars, first_chars, and last_chars
+              strings contain characters that can be used (they are -allowed),
+              or cannot be used (they are -restricted) in design object names.
+              The  dash  (-)  character indicates a range of ASCII characters.
+              To include a literal dash character in a chars  parameter,  pre-
+              cede it with 2 backslashes (\\-).  Blank spaces are disregarded.
+              A minimum of 10 characters  must  be  allowed  or  an  error  is
+              reported.   The  order  of  the  characters  in the chars string
+              parameters is not significant.
+
+              The following example specifies a character  set  consisting  of
+              uppercase characters and an underscore.
+
+                prompt> define_name_rules -allowed "A-Z _"
+
+              In  the  following  example,  some  punctuation  characters  are
+              restricted.  The dash (-) character is restricted with the char-
+              acter   sequence  \\-.   The  double  quotation  marks  (")  are
+              restricted with the sequence \".   First  characters  cannot  be
+              lowercase.
+
+                prompt> define_name_rules -restricted "!@#$%^&*()\\-" \
+                        -first_restricted "a-z"
+
+              The  following example attempts to restrict the character set to
+              fewer than 10 characters. An error is reported.
+
+                prompt> define_name_rules -allowed "ABCDE"
+
+              If a design object name contains a character that is  restricted
+              for  its  object  type, the following steps are taken to fix the
+              name:
+
+               o Step 1
+                Remove the character - If -remove_chars is  specified  in  the
+                name rules, the offending character is removed.
+
+               o Step 2
+                Change  the  case  - The case of characters is changed to meet
+                character restrictions.  The change is  accepted  if  the  new
+                character is allowed.  For example, if names are restricted to
+                uppercase  characters,  the  name  sum_port  is   changed   to
+                SUM_PORT.
+
+               o Step 3
+                Replace  the  character - A restricted character is changed to
+                the value of -replacement_char.  For example,  if  punctuation
+                characters are not allowed and the replacement character is an
+                underscore, the name U$1 is changed to U_1.
+
+               o Step 4
+                Uniquify the name - If the name created in either  Step  1  or
+                Step 2 is not unique, an index is appended to the new name.
+
+       Reserved Word Rules
+              Prohibit  specific  names  from  becoming design object names by
+              using the -reserved_words.  The parameter to this  option  is  a
+              list of names that are not allowed as design object names.
+
+              The  following  example uses -reserved_words.  The words DESIGN,
+              MODULE, START, and END are designated as reserved.  The case  of
+              the names in this list is significant.
+
+                prompt> define_name_rules \
+                        -reserved_words {"DESIGN", "MODULE", "START", "END"}
+
+       Case Insensitive Rules
+              If -case_insensitive is specified, the case of the characters in
+              a name is not significant when comparing names.
+
+              If -case_insensitive is specified, the  case  of  characters  in
+              reserved words is not significant.  For example, if -case_insen-
+              sitive is used and the string MODULE is specified as a  reserved
+              word,  the  name  module  is also considered a reserved word and
+              changed.
+
+       Port and Net Rules
+              Make the name of a net connected to a port equal to the name  of
+              that port with -equal_ports_nets.  If this substitution causes a
+              conflict, no names are changed and a warning message is  issued.
+              If  a  net  is  connected  to  more  than one port, no names are
+              changed and a warning message is issued.
+
+       Name Space Rules
+              By default, name spaces of ports, cells, and nets are  separate.
+              Names  of  ports  and  cells  must be unique within a design.  A
+              port, a cell, and a net within a design can share the same name.
+
+              Name  spaces  for ports, cells, and nets can be shared using the
+              -collapse_name_space option.  Ports, cells, and  nets  within  a
+              design must be unique across all objects.  Conflicting names are
+              modified by appending digits to their name.
+
+              If   the   -collapse_name_space   option   is   specified   with
+              -equal_ports_nets,  -equal_ports_nets  has  priority  over -col-
+              lapse_name_space.  So you may still have a  net  that  is  named
+              same as the connected port.
+
+       Type-Specific Rules
+              Name  rules  can  be  tailored for ports, cells, and nets object
+              types with the -type option.  The options  to  define_name_rules
+              that can be specified by object type are as follows:
+
+                -max_length
+                -allowed
+                -restricted
+                -first_restricted
+                -last_restricted
+                -replacement_char
+                -remove_chars
+                -prefix
+
+              To  specify  the  maximum  length restriction on ports different
+              than the maximum  length  for  cells,  make  multiple  calls  to
+              define_name_rules.
+
+              In  the following example, the maximum length of ports is set to
+              12.  The maximum length of cells  is  set  to  8.   The  maximum
+              length of nets is unrestricted.
+
+                prompt> define_name_rules EXAMPLE -max_length 12 -type port
+
+                prompt> define_name_rules EXAMPLE -max_length 8 -type cell
+
+       Special Rules
+              Define name rules that are for a specific target system and can-
+              not be modeled with the general define_name_rules options.   The
+              systems supported by the -special option are sge, verilog, vhdl,
+              vhdl93, sge_vhdl, and siff.
+
+              Specifying -special verilog adds one rule to make names  conform
+              to the rules of Verilog.
+
+              The difference between -special verilog and -rules verilog is as
+              follows:
+
+               o For -special verilog, verilog means the output format  for  a
+                specific target system.  The following rules will be specified
+                automatically along with [-special verilog]:
+
+                  -collapse_name_space
+                  -equal_ports_nets
+                  -inout_ports_equal_nets
+                  -remove_irregular_port_bus
+                  -remove_irregular_net_bus
+
+               o For -rules verilog, verilog means the name of the rule.   The
+                verilog rule is a predefined name rule in change_names and the
+                recommended rule.  The following rules are already defined  in
+                verilog rule:
+
+                  -special verilog
+                  -target_bus_naming_style {%s[%d]}
+                  -flatten_multi_dimension_busses
+                  -check_internal_net_name
+                  -check_bus_indexing
+                   ...
+
+                You can add other rules to the verilog rule set.
+
+                 o  Specifying  -special vhdl adds one rule to make names con-
+                  form to the rules of VHDL.  This option does not allow  con-
+                  secutive underscores in a name.
+
+                 o Specifying -special vhdl93 adds one rule to make names con-
+                  form to the rule of VHDL93.  This option adds support for an
+                  extended  identifier.   An extended identifier is a sequence
+                  of characters that are defined by the VHDL93  character  set
+                  and are written between two backslashes (\ \).
+
+                 o Specifying -special sge adds one rule to make names conform
+                  to the rules of the SGE system.  This option does not  allow
+                  net  names  that  start with the characters BBBB_ and NNNN_.
+                  These names are reserved by the SGE system.
+
+                 o Specifying -special sge_vhdl is a combination of the previ-
+                  ous  two  rules.   The  change_names  command enforces -col-
+                  lapse_name_space and -equal_ports_nets,  but  because  these
+                  two  rules  conflict  with  each  other,  the  sge_vhdl rule
+                  applies under the following conditions:
+
+                   -- The -collapse_name_space rule first  checks  the  object
+                    class  type.  If the object is a port, it checks to see if
+                    the name is used by any port names.  Since the  ports  are
+                    processed  first,  there  are no collisions with the other
+                    name spaces.  If the object is a cell or a design, it ver-
+                    ifies  that  the  name is not used previously by any port.
+                    If the object is a net, it checks the port, and cell  name
+                    spaces.   If there is a name conflict, it changes the name
+                    so that it is unique.  See the  -collapse_name_space  rule
+                    description for details.
+
+                   -- The -equal_ports_nets rule is applied to a scalar net or
+                    a net object whose owning bus is not of  a  single  width.
+                    See the -equal_ports_nets rule description for details.
+
+                 o  Specifying  -special siff adds one rule to make names con-
+                  form to the rules for the "Synopsys  Integrator  For  Falcon
+                  Framework."
+
+                All  of the special rules previously given share the same name
+                rules in addition to their own name rules:
+
+                 o The names of  bused  ports  or  nets  follow  the  bus_nam-
+                  ing_style, except that sge_vhdl always uses "%s(%d)" instead
+                  of bus_naming_style.
+
+                 o The names of bused ports or nets owned by the same bus have
+                  the  same  base name.  The bus index order follows the index
+                  part defined in the owning bus.
+
+                 o If a net does not belong to a busbag and it contains a sep-
+                  arator  character  defined in the bus_naming_style variable,
+                  this separator character changes to _ (underscore)  and  the
+                  ending separator is removed.  For example, the net name sam-
+                  ple[24][3] changes to the name sample_24_3.
+
+                Specifying -special does not create all of the rules necessary
+                for VHDL, SGE, or SIFF compliance.  Only the non-general rules
+                previously described are created.  To  make  define_name_rules
+                to  constrain  names to fully meet the requirements of SGE and
+                VHDL, use the other options in conjunction with -special.
+
+                To avoid conflict, do not merge special name rules  with  name
+                rules  that  you  defined.   When defined name rules conflict,
+                change_names could generate names that are  not  compliant  to
+                your  name  rule.   When there is a conflict among name rules,
+                define each one of those name rules using a different name  in
+                define_name_rules  and  apply each of them using change_names.
+                The last rule applied generates names that override names gen-
+                erated by previous rules.
+
+       Mapping Rules
+              The -map option specifies the name mapping and replacement rules
+              as defined in the map_string.  The mapping string has  the  fol-
+              lowing format:
+
+                {{"pattern", "replacement"} [,{"pattern", "replacement"}]* }
+
+              The mapping string is grouped into pairs.  There can be any num-
+              ber of pairs in a mapping string.  Each pair is enclosed  by  {}
+              (curly  braces)  and separated by a , (comma).  The change_names
+              and report_names commands apply all of  them  according  to  the
+              order specified in the map_string.
+
+              The  first  member  of each pair is the pattern string, which is
+              used to match against the object name.  The second member is the
+              replacement string, which is used to replace the matched portion
+              of the object name.  Both the  pattern  and  replacement  string
+              must  begin and end with " (double quotation marks).  There is a
+              , (comma) between pattern and replacement string.
+
+              The following example has the first occurrence of any portion of
+              an  object  name  that contains _reg replaced by an empty string
+              and the first occurrence of any portion of a  object  name  that
+              contains A replaced by a in the new name.
+
+                prompt> define_name_rules my_rule -map {{"_reg", ""}, {"A", "a"}}
+
+              The  pattern  string  also  provides  limited regular expression
+              capability.  The following 4 special characters are supported to
+              make the mapping strings more specific:
+
+               o The $ (dollar sign) indicates the end of string.
+
+               o The ^ (caret) indicates the beginning of string.
+
+               o  The  *  (asterisk)  indicates  a wildcard matching 0 or more
+                characters.
+
+               o The ? (question mark) indicates a wildcard matching 1 charac-
+                ter.
+
+              The  following  example defines a rule that any name ending with
+              _reg is replaced by in at the end of the string:
+
+                prompt> define_name_rules my_rule0 -map {{"_reg$", "in"}}
+
+              The following example defines a rule  that  any  name  beginning
+              with _reg is replaced by in at the beginning of the string:
+
+                prompt> define_name_rules my_rule1 -map {{"^_reg", "in"}}
+
+              The  following  example defines a rule that the first occurrence
+              of any substring of a name that begins with _r and ends  with  g
+              is replaced by the in string:
+
+                prompt> define_name_rules my_rule2 -map {{"_r*g", "in"}}
+
+              The  following  example defines a rule that the first occurrence
+              of any substring of a name that begins with _r followed any  one
+              character, then ending with g is replaced by in:
+
+                prompt> define_name_rules my_rule3 -map {{"_r?g", "in"}}
+
+              Once a mapping rule is defined, you can only use -reset to reset
+              the mapping rule.  You cannot redefine the same matching pattern
+              within  the  same rule.  For example, assume you define the fol-
+              lowing rule:
+
+                prompt> define_name_rules my_rule4 -map {{"A", "X"}}
+
+              If you then decide to replace all occurrences of A with  Z,  you
+              must  first  execute a reset and then redefine the name rules as
+              follows:
+
+                prompt> define_name_rules my_rule4 -reset
+
+                prompt> define_name_rules my_rule4 -map {{"A", "Z"}}
+
+              To insert escape characters into names, you  can  also  use  the
+              -map option.  This is useful prior to generating reports, if the
+              report output is processed by a program  that  requires  certain
+              characters  to  be escaped.  For example, if names contain the /
+              (slash) character, the tool cannot  differentiate  between  a  /
+              used  in  a  name  and  a  / that denotes a change in hierarchy.
+              Defining a rule with the following command replaces any /  in  a
+              name with \/ (backslash slash).
+
+                prompt> define_name_rules -map {{"/", "\\/"}}
+
+              The   name   HAS/SLASH   inside   hierarchy   A  writes  out  as
+              A/HAS\/SLASH.
+
+       Default Rules Values
+              Once defined, you can reset name rules to their  default  values
+              with  the  -reset  option.   Name  rules with all default values
+              impose no restrictions on design object names.
+
+dc_shell> man define_name_rules > ~/1
+dc_shell> 
