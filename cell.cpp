@@ -9,7 +9,7 @@ cell::cell(std::string line){
 
 	type = tokens[0];
 
-	//std::cout << line << std::endl;
+	std::cout << line << std::endl;
 
 	if(type.find("INV") !=std::string::npos || type.find("BUF") !=std::string::npos || type.find("DFF") !=std::string::npos)
 		type = type;
@@ -103,7 +103,7 @@ void cell::_parseSeqCell(std::string line){
         if(1 == numFanIn){
                 boost::algorithm::trim(tokens[2]);
                 pos=tokens[2].find(")");
-                ipList.push_back(prefix+"_DFXLAB_"+name+"_DFXLAB_Q_DFXLAB_"+tokens[2].substr(0, pos));
+                ipList.push_back(prefix+"_DFXLAB_"+name+"_DFXLAB_D_DFXLAB_"+tokens[2].substr(0, pos));
                 //ipList.push_back(tokens[2].substr(0, pos));
 		//std::cout << prefix+"_DFXLAB_"+name+"_DFXLAB_Q_DFXLAB_"+tokens[2].substr(0, pos) << std::endl;		
 	
